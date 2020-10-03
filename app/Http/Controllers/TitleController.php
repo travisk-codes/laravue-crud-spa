@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Title;
 use Illuminate\Http\Request;
+use App\Http\Requests\TitleRequest;
 
 class TitleController extends Controller
 {
@@ -23,9 +24,10 @@ class TitleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TitleRequest $request)
     {
-        //
+        $title = Title::create($request->validated());
+        return response()->json($title);
     }
 
     /**
