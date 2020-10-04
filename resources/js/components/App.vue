@@ -1,25 +1,42 @@
 <template>
   <div>
     <ul>
-      <li :key="title.id" v-for="title in titles">
-        {{ title.title }}
-      </li>
+      <Title
+        v-for="title in titles"
+        :key="title.id"
+        :title="title"
+        v-on:delete-title="deleteTitle"
+      />
     </ul>
   </div>
 </template>
 
 <script>
+import Title from "./Title";
+
 export default {
   name: "App",
+  components: {
+    Title,
+  },
   data() {
     return {
       titles: [],
+      activeTitle: null,
     };
   },
-  mounted() {
-    axios.get("http://homestead.test/api/title").then((resp) => {
-      this.titles = resp.data.data;
-    });
+  async mounted() {
+    const resp = await fetch("http://homestead.test/api/title");
+    const json = await resp.json();
+    this.titles = json.data;
+  },
+  methods: {
+    async deleteTitle(id) {
+      this.titles = this.titles.filter((title) => title.id !== id);
+      await fetch(`http://homestead.test/api/title/${id}`, {
+        method: "DELETE",
+      });
+    },
   },
 };
 </script>
