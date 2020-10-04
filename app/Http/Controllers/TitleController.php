@@ -62,6 +62,7 @@ class TitleController extends Controller
      */
     public function destroy(Title $title)
     {
-        //
+        $title->delete();
+        return response()->noContent();
     }
 }
