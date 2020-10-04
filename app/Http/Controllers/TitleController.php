@@ -48,9 +48,10 @@ class TitleController extends Controller
      * @param  \App\Models\Title  $title
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Title $title)
+    public function update(TitleRequest $request, Title $title)
     {
-        //
+        $title->update($request->validated());
+        return response()->json($title);
     }
 
     /**
