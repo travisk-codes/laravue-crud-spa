@@ -6,6 +6,7 @@
         :key="title.id"
         :title="title"
         v-on:delete-title="deleteTitle"
+        v-on:edit-title="editTitle"
       />
     </ul>
     <AddTitle v-on:add-title="addTitle" />
@@ -48,6 +49,15 @@ export default {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(newTitle),
+      });
+    },
+    async editTitle(title) {
+      await fetch(`http://homestead.test/api/title/${title.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(title),
       });
     },
   },

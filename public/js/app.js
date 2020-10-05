@@ -1994,6 +1994,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2087,6 +2088,29 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee3);
       }))();
+    },
+    editTitle: function editTitle(title) {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.next = 2;
+                return fetch("http://homestead.test/api/title/".concat(title.id), {
+                  method: "PUT",
+                  headers: {
+                    "Content-Type": "application/json"
+                  },
+                  body: JSON.stringify(title)
+                });
+
+              case 2:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
+      }))();
     }
   }
 });
@@ -2109,14 +2133,33 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Child",
   props: {
     title: Object
   },
+  data: function data() {
+    return {
+      isActive: false,
+      text: this.title.title
+    };
+  },
   methods: {
     deleteTitle: function deleteTitle(id) {
       this.$emit("delete-title", id);
+    },
+    toggleActive: function toggleActive() {
+      this.isActive = !this.isActive;
+    },
+    editTitle: function editTitle(id) {
+      this.$emit("edit-title", {
+        id: id,
+        title: this.text
+      });
+      this.toggleActive();
     }
   }
 });
@@ -20856,7 +20899,7 @@ var render = function() {
           return _c("Title", {
             key: title.id,
             attrs: { title: title },
-            on: { "delete-title": _vm.deleteTitle }
+            on: { "delete-title": _vm.deleteTitle, "edit-title": _vm.editTitle }
           })
         }),
         1
@@ -20902,7 +20945,46 @@ var render = function() {
       [_vm._v("X")]
     ),
     _vm._v(" "),
-    _c("span", [_vm._v(_vm._s(_vm.title.title))])
+    _vm.isActive
+      ? _c(
+          "form",
+          {
+            on: {
+              submit: function($event) {
+                $event.preventDefault()
+                return _vm.editTitle(_vm.title.id)
+              }
+            }
+          },
+          [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.text,
+                  expression: "text"
+                }
+              ],
+              attrs: { type: "text" },
+              domProps: { value: _vm.text },
+              on: {
+                blur: function($event) {
+                  return _vm.editTitle(_vm.title.id)
+                },
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.text = $event.target.value
+                }
+              }
+            })
+          ]
+        )
+      : _c("span", { on: { click: _vm.toggleActive } }, [
+          _vm._v(_vm._s(_vm.text))
+        ])
   ])
 }
 var staticRenderFns = []
